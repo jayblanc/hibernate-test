@@ -34,7 +34,7 @@ public class DeathTest {
         LOGGER.log(Level.INFO, "Initialising...");
         try {
             LOGGER.log(Level.INFO, "Starting database");
-            System.setProperty("derby.system.home", System.getProperty("user.dir") + ".hibernatesucks");
+            System.setProperty("derby.system.home", System.getProperty("user.dir") + ".hibernatetest");
             shutdownUrl = "jdbc:derby:tooldb;shutdown=true";
             connectionUrl = "jdbc:derby:tooldb;create=true";
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -89,21 +89,18 @@ public class DeathTest {
             
             em.getTransaction().begin();
             Toto origin = em.find(Toto.class, "1");
-            origin.setName("THE toto pourri");
-            origin.setSurname("DTC");
+            origin.setName("THE toto two");
+            origin.setSurname("Kabadoc");
             
-            //Simulate clone function call
             Toto clone = new Toto();
             clone.setId("2");
             clone.setName(origin.getName());
             clone.setSurname(origin.getSurname());
             em.persist(clone);
-            //End of clone function
             
             origin = clone;
             em.merge(origin);
             em.getTransaction().commit();
-            
             
             em.getTransaction().begin();
             Toto t1 = em.find(Toto.class, "1");
@@ -112,8 +109,8 @@ public class DeathTest {
             assertEquals("THE toto one", t1.getName());
             assertEquals("Dadaduc", t1.getSurname());
             assertEquals("2", t2.getId());
-            assertEquals("THE toto pourri", t2.getName());
-            assertEquals("DTC", t2.getSurname());
+            assertEquals("THE toto two", t2.getName());
+            assertEquals("Kadadoc", t2.getSurname());
             em.getTransaction().commit();
             
         } catch (Exception e) {
